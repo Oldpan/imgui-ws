@@ -60,5 +60,5 @@ add_subdirectory(src)
 
 if (IMGUI_WS_STANDALONE)
     add_subdirectory(examples)
-    add_subdirectory(tools)
+    # add_subdirectory(tools)
 endif()

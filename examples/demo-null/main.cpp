@@ -77,7 +77,7 @@ int main(int argc, char ** argv) {
     io.KeyMap[ImGuiKey_Y]           = 89;
     io.KeyMap[ImGuiKey_Z]           = 90;
 
-    io.MouseDrawCursor = true;
+    io.MouseDrawCursor = false;
 
     ImGui::StyleColorsDark();
     ImGui::GetStyle().AntiAliasedFill = false;
