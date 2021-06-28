@@ -3,7 +3,13 @@
 
 #include "common.h"
 
+#include <opencv2/opencv.hpp>
+#include <sys/stat.h>
+#include <dirent.h>
 #include <map>
+#include <fstream>
+#include <iostream>
+// #include <iomanip>
 
 struct State {
     State() {
@@ -12,7 +18,7 @@ struct State {
         }
     }
 
-    bool showDemoWindow = true;
+    bool showImageWindow = true;
 
     // client control management
     struct ClientData {
@@ -41,6 +47,17 @@ struct State {
     void handle(ImGuiWS::Event && event);
     void update();
 };
+
+struct ImageShowUtil{
+
+    std::vector<std::string> imagePaths;
+    std::string imagePath;
+    int imageNum;
+    bool imageUpdate = false;
+    std::string name;
+    void readPath(char* fn);
+};
+
 
 int main(int argc, char ** argv) {
     printf("Usage: %s [port] [http-root]\n", argv[0]);
@@ -108,22 +125,45 @@ int main(int argc, char ** argv) {
         }
         state.update();
 
-        io.DisplaySize = ImVec2(1200, 800);
+        io.DisplaySize = ImVec2(1600, 1200);
         io.DeltaTime = vsync.delta_s();
 
         ImGui::NewFrame();
 
-        // render stuff
-        if (state.showDemoWindow) {
-            ImGui::ShowDemoWindow(&state.showDemoWindow);
+        // Control/Debug window
+        {
+            ImGui::Begin("FPS");
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::Checkbox("Image Window", &state.showImageWindow);
+            ImGui::End();
         }
 
-        // debug window
-        {
-            ImGui::Begin("Hello, world!");
-            ImGui::Checkbox("Demo Window", &state.showDemoWindow);
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        if(state.showImageWindow){
+            ImageShowUtil imgsu;
+            static char image_path[128] = "/";
+            
+            ImGui::Begin("Image Show Window");
+            ImGui::InputTextWithHint("image path", "input absolute image path", image_path, IM_ARRAYSIZE(image_path));
+            imgsu.imageUpdate |= ImGui::Button("update");
+            if(imgsu.imageUpdate){
+                if(imgsu.imagePath != std::string(image_path)){
+                    try{
+                        imgsu.readPath(image_path);
+                    }
+                    catch(const char* msg){
+                        std::cout << "error: " << msg << "\n";
+                    }
+                    // 
+                }
+
+                // for(auto& img_path:imgsu.imagePaths){
+                    
+                // }
+
+            }
+
             ImGui::End();
+        
         }
 
         // show connected clients
@@ -275,4 +315,31 @@ void State::update() {
         lastMouseWheel = 0.0;
         lastAddText = "";
     }
+}
+
+
+void ImageShowUtil::readPath(char* fn){
+
+    struct stat name_stat;
+    if (stat(fn, &name_stat) != 0) {
+        std::cerr << "Failed to find '" << std::string(fn)
+                << "': " << strerror(errno) << std::endl;
+        exit(1);
+    }
+    // 读取图像名称并且放入数组 image_filenames
+    if (name_stat.st_mode & S_IFDIR) {
+        const std::string dirname = fn;
+        DIR* dir_ptr = opendir(dirname.c_str());
+        struct dirent* d_ptr;
+        while ((d_ptr = readdir(dir_ptr)) != NULL) {
+            const std::string filename = d_ptr->d_name;
+            if ((filename != ".") && (filename != "..")) {
+                imagePaths.push_back(dirname + "/" + filename);
+            }
+        }
+        closedir(dir_ptr);
+    } else {
+        imagePaths.push_back(fn);
+    }
+
 }
