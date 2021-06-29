@@ -1,12 +1,13 @@
 #include "imgui/imgui.h"
 #include "imgui-ws/imgui-ws.h"
-
+#include <opencv2/opencv.hpp>
 #include "common.h"
 
 // texture IDs - these are user generated. Use whatever fits you
 uint32_t g_texture0Id = 100;
 uint32_t g_texture1Id = 200;
 uint32_t g_texture2Id = 300;
+uint32_t g_texture3Id = 400;
 
 void regenerate(ImGuiWS & imguiWS, int time) {
     {
@@ -18,6 +19,7 @@ void regenerate(ImGuiWS & imguiWS, int time) {
             texture0[i] = rand()%256;
         }
         imguiWS.setTexture(g_texture0Id, ImGuiWS::Texture::Type::Gray8, width, height, (const char *) texture0.data());
+        std::cout << "debug : " <<  int(texture0.data()[40]) << "\n";
     }
 
     {
@@ -76,6 +78,12 @@ int main(int argc, char ** argv) {
 
     // generate some random textures
     regenerate(imguiWS, 0);
+    cv::Mat temp_img = cv::imread("/home/homework/data/TXFLv2/train/jielong/jielong_1_new_866376e436ddc06f04129f79600c5196.jpg");
+    cv::cvtColor(temp_img, temp_img, cv::COLOR_BGR2RGB);
+    int width = temp_img.cols;
+    int height = temp_img.rows;
+    // std::cout << "debug: " << int(temp_img.data[40]) << "\n";
+    imguiWS.setTexture(g_texture3Id, ImGuiWS::Texture::Type::RGB24, width, height, (const char *) temp_img.data);
 
     VSync vsync;
 
@@ -107,8 +115,10 @@ int main(int argc, char ** argv) {
         ImGui::Image((void *)(intptr_t) g_texture0Id, { 128, 128 }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
         ImGui::SameLine();
         ImGui::Image((void *)(intptr_t) g_texture1Id, { 128, 128 }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
+        // ImGui::SameLine();
+        // ImGui::Image((void *)(intptr_t) g_texture2Id, { 128, 128 }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
         ImGui::SameLine();
-        ImGui::Image((void *)(intptr_t) g_texture2Id, { 128, 128 }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
+        ImGui::Image((void *)(intptr_t) g_texture3Id, { width, height }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
         ImGui::End();
 
         ImGui::SetNextWindowPos({ 20, 360 });

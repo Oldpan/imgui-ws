@@ -58,6 +58,7 @@ struct ImageShowUtil{
     void readPath(char* fn);
 };
 
+uint32_t g_textureId = 100;
 
 int main(int argc, char ** argv) {
     printf("Usage: %s [port] [http-root]\n", argv[0]);
@@ -114,6 +115,14 @@ int main(int argc, char ** argv) {
         imguiWS.setTexture(0, ImGuiWS::Texture::Type::Alpha8, width, height, (const char *) pixels);
     }
 
+    cv::Mat temp_img = cv::imread("/home/homework/data/TXFLv2/train/jielong/jielong_1_new_866376e436ddc06f04129f79600c5196.jpg");
+    cv::cvtColor(temp_img, temp_img, cv::COLOR_BGR2RGB);
+    // temp_img.convertTo(temp_img, CV_8SC3);
+
+    int width = temp_img.cols;
+    int height = temp_img.rows;
+    imguiWS.setTexture(g_textureId, ImGuiWS::Texture::Type::RGB24, width, height, (const char *) temp_img.data);
+
     VSync vsync;
     State state;
 
@@ -162,9 +171,14 @@ int main(int argc, char ** argv) {
 
             }
 
+        
             ImGui::End();
         
         }
+
+        ImGui::Begin("Some random images");
+        ImGui::Image((void *)(intptr_t)&g_textureId, { width, height }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
+        ImGui::End();
 
         // show connected clients
         ImGui::SetNextWindowPos({ 10, 10 } , ImGuiCond_Always);
