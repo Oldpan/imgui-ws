@@ -1,7 +1,7 @@
 
 find_package(OpenCV REQUIRED)
 
-add_executable(demo-null main.cpp)
+add_executable(demo-null main.cpp utils.cpp)
 target_include_directories(demo-null PRIVATE 
                             ..
                             ${OpenCV_INCLUDE_DIRS} )
