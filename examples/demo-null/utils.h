@@ -2,4 +2,4 @@
 
 #pragma once
 
-void simgPadding(Mat img, Mat &imgRes, int minEdgeLimit, int maxEdgeLimit);
+// void simgPadding(Mat img, Mat &imgRes, int minEdgeLimit, int maxEdgeLimit);

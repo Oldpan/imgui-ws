@@ -117,8 +117,8 @@ int main(int argc, char ** argv) {
         ImGui::Image((void *)(intptr_t) g_texture1Id, { 128, 128 }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
         // ImGui::SameLine();
         // ImGui::Image((void *)(intptr_t) g_texture2Id, { 128, 128 }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
-        ImGui::SameLine();
-        ImGui::Image((void *)(intptr_t) g_texture3Id, { width, height }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
+        // ImGui::SameLine();
+        // ImGui::Image((void *)(intptr_t) g_texture3Id, { width, height }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
         ImGui::End();
 
         ImGui::SetNextWindowPos({ 20, 360 });

@@ -115,7 +115,7 @@ int main(int argc, char ** argv) {
         imguiWS.setTexture(0, ImGuiWS::Texture::Type::Alpha8, width, height, (const char *) pixels);
     }
 
-    cv::Mat temp_img = cv::imread("/home/homework/data/TXFLv2/train/jielong/jielong_1_new_866376e436ddc06f04129f79600c5196.jpg");
+    cv::Mat temp_img = cv::imread("/Users/guoyanzong/Downloads/demo_images/123.png");
     cv::cvtColor(temp_img, temp_img, cv::COLOR_BGR2RGB);
     cv::resize(temp_img, temp_img, cv::Size(1024,1024));
     // temp_img.convertTo(temp_img, CV_8SC3);
@@ -178,7 +178,7 @@ int main(int argc, char ** argv) {
         }
 
         ImGui::Begin("Some random images");
-        ImGui::Image((void *)(intptr_t)g_textureId, { width, height }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
+        ImGui::Image((void *)(intptr_t)g_textureId, { static_cast<float>(width), static_cast<float>(height) }, ImVec2(0,0), ImVec2(1,1), ImVec4(1.0f,1.0f,1.0f,1.0f), ImVec4(1.0f,1.0f,1.0f,0.5f));
         ImGui::End();
 
         // show connected clients
