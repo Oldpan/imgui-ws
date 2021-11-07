@@ -17,6 +17,7 @@
 #include <cstring>
 #include <mutex>
 #include <shared_mutex>
+#include <condition_variable>
 
 // not using ssl
 using incppect = Incppect<false>;
@@ -251,6 +252,12 @@ bool ImGuiWS::init(int32_t port, const char * pathHttp) {
                                 // resize
                                 event.type = Event::Resize;
                                 ss >> event.client_width >> event.client_height;
+                            }
+                            break;
+                        case 8:
+                            {
+                                // take control
+                                event.type = Event::TakeControl;
                             }
                             break;
                         default:
